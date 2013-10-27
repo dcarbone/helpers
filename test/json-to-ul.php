@@ -40,7 +40,7 @@ use DCarbone\Helpers\JsonToUL;
     </form>
     <?php if (isset($_POST['jsonString'])) : ?>
         <h2 class="grid_16">Output</h2>
-        <div class="grid_16"><?php echo JsonToUl::invoke($_POST['jsonString'], false); ?></div>
+        <div class="grid_16"><?php echo JsonToUL::invoke($_POST['jsonString'], false); ?></div>
     <?php endif; ?>
 </div>
 <div id="footer" class="container_16">
