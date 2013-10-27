@@ -66,11 +66,21 @@ class JsonToUL
                 $li->appendChild($ul);
                 self::arrayOutput($v, $dom, $ul);
             }
-            else if (is_string($v))
+            else if (is_scalar($v) && !is_bool($v))
             {
                 $span = $dom->createElement('span');
-                $span->appendChild($dom->createTextNode(' '.$v));
+                $span->appendChild($dom->createTextNode(' '.strval($v)));
                 $li->appendChild($span);
+            }
+            else if (is_bool($v))
+            {
+                $text = null;
+                switch($v)
+                {
+                    case true : $text = $dom->createTextNode(' TRUE'); break;
+                    case false : $text = $dom->createTextNode(' FALSE'); break;
+                }
+                $li->appendChild($text);
             }
         }
         return $dom;
@@ -102,9 +112,19 @@ class JsonToUL
                 $li->appendChild($ul);
                 self::arrayOutput($value, $dom, $ul);
             }
-            else if (is_string($value))
+            else if (is_scalar($value) && !is_bool($value))
             {
-                $li->appendChild($dom->createTextNode($value));
+                $li->appendChild($dom->createTextNode(strval($value)));
+            }
+            else if (is_bool($value))
+            {
+                $text = null;
+                switch($value)
+                {
+                    case true : $text = $dom->createTextNode(' TRUE'); break;
+                    case false : $text = $dom->createTextNode(' FALSE'); break;
+                }
+                $li->appendChild($text);
             }
         }
         return $dom;
