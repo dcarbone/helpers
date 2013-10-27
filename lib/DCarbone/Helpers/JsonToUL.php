@@ -1,5 +1,7 @@
 <?php namespace DCarbone\Helpers;
 
+use DCarbone\Helpers\DOMPlus;
+
 /**
  * Class JsonToUL
  * @package DCarbone
@@ -11,11 +13,11 @@ class JsonToUL
      *
      * @param $jsonString
      * @param bool $returnDOM
-     * @return \DOMDocument|mixed|string
+     * @return DOMPlus|mixed|string
      */
     public static function invoke($jsonString, $returnDOM = false)
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom = new DOMPlus('1.0', 'UTF-8');
 
         $jsonString = mb_convert_encoding($jsonString, 'UTF-8', mb_detect_encoding($jsonString));
 
@@ -31,30 +33,20 @@ class JsonToUL
             self::arrayOutput($jsonDecode, $dom, $ul);
 
         if ($returnDOM === false)
-        {
-            if (PHP_VERSION_ID >= 50306)
-                return $dom->saveHTML($ul);
-            else
-                return preg_replace(array("/^\<\!DOCTYPE.*?<html><body>/si",
-                        "!</body></html>$!si"),
-                    "",
-                    $dom->saveHTML());
-        }
+            return $dom->saveHTML($ul);
         else
-        {
             return $dom;
-        }
     }
 
     /**
      * Parse through JSON Object
      *
      * @param \stdClass $object
-     * @param \DOMDocument $dom
+     * @param \DCarbone\Helpers\DOMPlus
      * @param \DOMElement $parentUL
-     * @return \DOMDocument
+     * @return \DCarbone\Helpers\DOMPlus
      */
-    protected static function objectOutput(\stdClass $object, \DOMDocument &$dom, \DOMElement &$parentUL)
+    protected static function objectOutput(\stdClass $object, DOMPlus &$dom, \DOMElement &$parentUL)
     {
         foreach($object as $k=>$v)
         {
@@ -88,11 +80,11 @@ class JsonToUL
      * Parse through JSON Array
      *
      * @param array $array
-     * @param \DOMDocument $dom
+     * @param \DCarbone\Helpers\DOMPlus
      * @param \DOMElement $parentUL
-     * @return \DOMDocument
+     * @return \DCarbone\Helpers\DOMPlus
      */
-    protected static function arrayOutput(array $array, \DOMDocument &$dom, \DOMElement &$parentUL)
+    protected static function arrayOutput(array $array, DOMPlus &$dom, \DOMElement &$parentUL)
     {
         foreach($array as $value)
         {

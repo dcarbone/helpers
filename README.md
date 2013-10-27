@@ -7,6 +7,7 @@ Included Helpers
 ----------------
 
 - JSON To UL
+- DOMPlus
 
 Basic Usage
 -----------
