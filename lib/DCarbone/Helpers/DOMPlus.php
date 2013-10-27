@@ -65,9 +65,16 @@ class DOMPlus extends \DOMDocument
      */
     public function saveHTMLExact(\DOMNode $node = null)
     {
-        return preg_replace(array("/^\<\!DOCTYPE.*?<html><body>/si",
-                "!</body></html>$!si"),
-            "",
-            $this->saveHTML($node));
+        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
+        {
+            return parent::saveHTML($node);
+        }
+        else
+        {
+            return preg_replace(array("/^\<\!DOCTYPE.*?<html><body>/si",
+                    "!</body></html>$!si"),
+                "",
+                $this->saveHTML($node));
+        }
     }
 }

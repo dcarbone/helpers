@@ -33,7 +33,7 @@ class JsonToUL
             self::arrayOutput($jsonDecode, $dom, $ul);
 
         if ($returnDOM === false)
-            return $dom->saveHTML($ul);
+            return $dom->saveHTMLExact($ul);
         else
             return $dom;
     }
