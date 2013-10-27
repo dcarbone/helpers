@@ -1,0 +1,36 @@
+{
+    "name" : "dcarbone/helpers",
+    "type" : "library",
+    "description" : "Some simple helper classes for PHP",
+
+    "keywords": [
+        "php",
+        "helpers",
+        "helper",
+        "domdocument",
+        "smartdomdocument",
+        "json",
+        "output"
+    ],
+    "homepage": "https://github.com/dcarbone/helpers",
+    "license": "MIT",
+
+    "authors" : [
+        {
+            "name" : "Daniel Carbone",
+            "email" : "daniel.p.carbone@gmail.com"
+        }
+    ],
+
+    "version" : "dev-master",
+
+    "require" : {
+        "php" : ">=5.3.0",
+        "lib-libxml" : "*"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "DCarbone\\Helpers\\" : "lib/"
+        }
+    }
+}
