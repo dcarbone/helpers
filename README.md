@@ -12,7 +12,7 @@ Included Helpers
 Basic Usage
 -----------
 
-*JSON To UL*
+### JSON To UL
 
 ```php
 $jsonString = <<<STRING
@@ -44,7 +44,7 @@ echo JSONToUl::invoke($jsonString);
 
 ```
 
-*DOMPlus*
+### DOMPlus
 
 This class was inspired by <a href="http://beerpla.net/projects/smartdomdocument-a-smarter-php-domdocument-class/" target="_blank">Artem Russakovskii's SmartDOMDocument Class</a>.
 
