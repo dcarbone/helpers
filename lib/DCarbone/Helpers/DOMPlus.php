@@ -39,6 +39,7 @@ class DOMPlus extends \DOMDocument
      */
     public function saveHTML(\DOMNode $node = null)
     {
+        $this->formatOutput = true;
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
         {
             return parent::saveHTML($node);
@@ -65,14 +66,16 @@ class DOMPlus extends \DOMDocument
      */
     public function saveHTMLExact(\DOMNode $node = null)
     {
-        if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
+        $this->formatOutput = true;
+
+        if ($node !== null && defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
         {
             return parent::saveHTML($node);
         }
         else
         {
-            return preg_replace(array("/^\<\!DOCTYPE.*?<html><body>/si",
-                    "!</body></html>$!si"),
+            return preg_replace(array("/^\<\!DOCTYPE.*?<body>/si",
+                    "!</body>.*</html>$!si"),
                 "",
                 $this->saveHTML($node));
         }
