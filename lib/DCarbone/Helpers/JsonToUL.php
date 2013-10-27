@@ -104,7 +104,7 @@ class JsonToUL
             }
             else if (is_string($value))
             {
-                $li->nodeValue = $value;
+                $li->appendChild($dom->createTextNode($value));
             }
         }
         return $dom;
