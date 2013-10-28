@@ -13,6 +13,29 @@
 class DOMPlus extends \DOMDocument
 {
     /**
+     * @var array
+     */
+    protected $errors = array();
+
+    /**
+     * Get error array
+     *
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Clear the error array
+     */
+    public function clearErrors()
+    {
+        $this->errors = array();
+    }
+
+    /**
      * Load HTML with a proper encoding fix/hack.
      * Borrowed from the link below.
      *
@@ -25,7 +48,13 @@ class DOMPlus extends \DOMDocument
     public function loadHTML($html, $encoding = 'UTF-8')
     {
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', $encoding);
-        return parent::loadHTML($html);
+        $return = parent::loadHTML($html);
+
+        $error = libxml_get_last_error();
+        if ($error !== false)
+            $this->errors[] = $error;
+
+        return $return;
     }
 
     /**
