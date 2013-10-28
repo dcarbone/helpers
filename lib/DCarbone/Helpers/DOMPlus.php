@@ -13,26 +13,45 @@
 class DOMPlus extends \DOMDocument
 {
     /**
+     * Persistent error array
+     *
      * @var array
      */
-    protected $errors = array();
+
+    protected static $allLoadErrors = array();
+    /**
+     * @var array
+     */
+    protected $loadErrors = array();
 
     /**
-     * Get error array
-     *
-     * @return array
+     * Constructor
      */
-    public function getErrors()
+    public function __construct()
     {
-        return $this->errors;
+        call_user_func_array('parent::__construct', func_get_args());
+
+        libxml_use_internal_errors(true);
     }
 
     /**
-     * Clear the error array
+     * Get the last errors thrown when loading HTML/XML
+     *
+     * @return array
      */
-    public function clearErrors()
+    public function getLastLoadErrors()
     {
-        $this->errors = array();
+        return $this->loadErrors;
+    }
+
+    /**
+     * Get all of the errors seen while loading HTML/XML
+     *
+     * @return array
+     */
+    public function getAllLoadErrors()
+    {
+        return static::$allLoadErrors;
     }
 
     /**
@@ -47,12 +66,13 @@ class DOMPlus extends \DOMDocument
      */
     public function loadHTML($html, $encoding = 'UTF-8')
     {
+        libxml_clear_errors();
+
         $html = mb_convert_encoding($html, 'HTML-ENTITIES', $encoding);
         $return = parent::loadHTML($html);
 
-        $error = libxml_get_last_error();
-        if ($error !== false)
-            $this->errors[] = $error;
+        $this->loadErrors = libxml_get_errors();
+        static::$allLoadErrors = array_merge(static::$allLoadErrors, $this->loadErrors);
 
         return $return;
     }
