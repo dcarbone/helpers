@@ -84,24 +84,35 @@ class DOMPlus extends \DOMDocument
      * This little hack allows us to do just that.
      *
      * @param \DOMNode $node
+     * @param bool $windowsLineEndings
      * @return string
      */
-    public function saveHTML(\DOMNode $node = null)
+    public function saveHTML(\DOMNode $node = null, $windowsLineEndings = false)
     {
         $this->formatOutput = true;
         if (defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
         {
-            return parent::saveHTML($node);
+            if ($windowsLineEndings === true)
+                return str_replace("\n", "\r\n", parent::saveHTML($node));
+            else
+                return parent::saveHTML($node);
         }
         else if ($node !== null && (!defined('PHP_VERSION_ID') || (defined('PHP_VERSION_ID') && PHP_VERSION_ID < 50306)))
         {
             $newDom = new DOMPlus();
             $newDom->appendChild($newDom->importNode($node->cloneNode(true), true));
-            return $newDom->saveHTML();
+
+            if ($windowsLineEndings === true)
+                return str_replace("\n", "\r\n", $newDom->saveHTML());
+            else
+                return $newDom->saveHTML();
         }
         else
         {
-            return parent::saveHTML();
+            if ($windowsLineEndings === true)
+                return str_replace("\n", "\r\n", parent::saveHTML());
+            else
+                return parent::saveHTML();
         }
     }
 
@@ -111,22 +122,26 @@ class DOMPlus extends \DOMDocument
      * @link http://php.net/manual/en/migration52.methods.php
      *
      * @param \DOMNode $node
+     * @param bool $windowsLineEndings
      * @return string
      */
-    public function saveHTMLExact(\DOMNode $node = null)
+    public function saveHTMLExact(\DOMNode $node = null, $windowsLineEndings = false)
     {
         $this->formatOutput = true;
 
         if ($node !== null && defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
         {
-            return parent::saveHTML($node);
+            if ($windowsLineEndings === true)
+                return str_replace("\n", "\r\n", parent::saveHTML($node));
+            else
+                return parent::saveHTML($node);
         }
         else
         {
             return preg_replace(array("/^\<\!DOCTYPE.*?<body>/si",
                     "!</body>.*</html>$!si"),
                 "",
-                $this->saveHTML($node));
+                ($windowsLineEndings === true ? str_replace("\n", "\r\n", $this->saveHTML($node)) : $this->saveHTML($node)));
         }
     }
 }
