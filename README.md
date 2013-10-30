@@ -8,6 +8,8 @@ Included Helpers
 
 - JSON To UL
 - DOMPlus
+- JSONWriterPlus
+- XMLWriterPlus
 
 Basic Usage
 -----------

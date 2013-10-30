@@ -10,7 +10,9 @@
         "domdocument",
         "smartdomdocument",
         "json",
-        "output"
+        "output",
+        "jsonwriter",
+        "xmlwriter"
     ],
     "homepage": "https://github.com/dcarbone/helpers",
     "license": "MIT",
@@ -21,8 +23,6 @@
             "email" : "daniel.p.carbone@gmail.com"
         }
     ],
-
-    "version" : "dev-master",
 
     "require" : {
         "php" : ">=5.3.0",
