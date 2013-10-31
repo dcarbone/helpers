@@ -10,6 +10,9 @@ Included Helpers
 - DOMPlus
 - JSONWriterPlus
 - XMLWriterPlus
+- ExtensibleArrayObject
+- KeyValuePair
+- JsonSerializable
 
 Basic Usage
 -----------
