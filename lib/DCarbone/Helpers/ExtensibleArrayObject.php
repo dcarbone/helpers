@@ -48,43 +48,6 @@ class ExtensibleArrayObject extends \ArrayObject
      */
     public function append($value, $name = null)
     {
-        return $this->offsetSet($name, $value);
-    }
-
-    /**
-     * @param mixed $name
-     * @return mixed
-     */
-    public function offsetGet($name)
-    {
-        return call_user_func_array(array($this, 'parent::'.__FUNCTION__), func_get_args());
-    }
-
-    /**
-     * @param mixed $name
-     * @param mixed $value
-     * @return mixed|void
-     */
-    public function offsetSet($name, $value)
-    {
-        return call_user_func_array(array($this, 'parent::'.__FUNCTION__), func_get_args());
-    }
-
-    /**
-     * @param mixed $name
-     * @return bool|mixed
-     */
-    public function offsetExists($name)
-    {
-        return call_user_func_array(array($this, 'parent::'.__FUNCTION__), func_get_args());
-    }
-
-    /**
-     * @param mixed $name
-     * @return mixed|void
-     */
-    public function offsetUnset($name)
-    {
-        return call_user_func_array(array($this, 'parent::'.__FUNCTION__), func_get_args());
+        $this->offsetSet($name, $value);
     }
 }
