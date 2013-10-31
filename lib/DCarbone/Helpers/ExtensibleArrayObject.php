@@ -17,6 +17,28 @@
 class ExtensibleArrayObject extends \ArrayObject
 {
     /**
+     * @var array
+     */
+    protected $propertyKeys = array();
+
+    /**
+     * Constructor
+     *
+     * @param array $input
+     * @param int $flags
+     * @param string $iterator_class
+     */
+    public function __construct($input = array(), $flags = 0, $iterator_class = 'ArrayIterator')
+    {
+        if (is_array($input))
+            $this->propertyKeys = array_keys($input);
+        else if (is_object($input))
+            $this->propertyKeys = get_object_vars($input);
+
+        parent::__construct($input, $flags, $iterator_class);
+    }
+
+    /**
      * Credit for this method goes to php5 dot man at lightning dot hu
      *
      * @link http://www.php.net/manual/en/class.arrayobject.php#107079
@@ -43,11 +65,53 @@ class ExtensibleArrayObject extends \ArrayObject
      * @link http://www.php.net/manual/en/arrayobject.append.php
      *
      * @param mixed $value
-     * @param null $name
+     * @param null $index
      * @return mixed
      */
-    public function append($value, $name = null)
+    public function append($value, $index = null)
     {
-        $this->offsetSet($name, $value);
+        $this->offsetSet($index, $value);
+    }
+
+    /**
+     * @param mixed $index
+     * @param mixed $newval
+     */
+    public function offsetSet($index, $newval)
+    {
+        parent::offsetSet($index, $newval);
+
+        if (!in_array($index, $this->propertyKeys, true))
+            $this->propertyKeys[] = $index;
+    }
+
+    /**
+     * @param mixed $index
+     */
+    public function offsetUnset($index)
+    {
+        parent::offsetUnset($index);
+        $idx = array_search($index, $this->propertyKeys, true);
+        if ($idx !== false)
+            unset($this->propertyKeys[$idx]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return (count($this) === 0);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function first()
+    {
+        if (!$this->isEmpty() && count($this->propertyKeys) > 0)
+            return $this[reset($this->propertyKeys)];
+
+        return null;
     }
 }
