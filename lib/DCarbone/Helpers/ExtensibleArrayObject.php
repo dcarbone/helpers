@@ -1,15 +1,17 @@
 <?php namespace DCarbone\Helpers;
 
 /**
- * Credit for this class goes to sfinktah at php dot spamtrak dot org
- *
- * @link http://www.php.net/manual/en/class.arrayobject.php#103508
- *
  * This class is designed to make it easier to write your own class extension of the base ArrayObject
- * class.
+ * class, as well as adding some features I believe the base class is lacking.
+ *
+ * Credit for this class goes to several commenters on the official PHP ArrayObject manual page
  *
  * For more information on the base ArrayObject class, see here:
  * @link http://www.php.net/manual/en/class.arrayobject.php
+ *
+ * Additional inspiration taken from Doctrine's ArrayCollection class
+ *
+ * @link https://github.com/doctrine/collections/blob/master/lib/Doctrine/Common/Collections/ArrayCollection.php
  *
  * Class ExtensibleArrayObject
  * @package DCarbone\Helpers
@@ -19,7 +21,12 @@ class ExtensibleArrayObject extends \ArrayObject
     /**
      * @var array
      */
-    protected $propertyKeys = array();
+    private $_propertyKeys = array();
+
+    /**
+     * @var int
+     */
+    private $_numericalIndex = 0;
 
     /**
      * Constructor
@@ -31,9 +38,9 @@ class ExtensibleArrayObject extends \ArrayObject
     public function __construct($input = array(), $flags = 0, $iterator_class = 'ArrayIterator')
     {
         if (is_array($input))
-            $this->propertyKeys = array_keys($input);
+            $this->_propertyKeys = array_keys($input);
         else if (is_object($input))
-            $this->propertyKeys = get_object_vars($input);
+            $this->_propertyKeys = array_keys(get_object_vars($input));
 
         parent::__construct($input, $flags, $iterator_class);
     }
@@ -43,6 +50,20 @@ class ExtensibleArrayObject extends \ArrayObject
      *
      * @link http://www.php.net/manual/en/class.arrayobject.php#107079
      *
+     * This method allows you to call any of PHP's built-in array_* methods that would
+     * normally expect an array parameter.
+     *
+     * Example: $myobj = new ExtensibleArrayObject(array('b','c','d','e','a','z')):
+     *
+     * $myobj->array_keys();  returns array(0, 1, 2, 3, 4, 5)
+     *
+     * $myobj->array_merge(array('1', '2', '3', '4', '5')); returns array('b','c','d','e','a','z','1','2','3','4,'5');
+     *
+     * And so on.
+     *
+     * WARNING:  In utilizing call_user_func_array(), using this method WILL have an adverse affect on performance.
+     * I recommend using this method only for development purposes.
+     *
      * @param $func
      * @param $argv
      * @return mixed
@@ -51,26 +72,89 @@ class ExtensibleArrayObject extends \ArrayObject
     public function __call($func, $argv)
     {
         if (!is_callable($func) || substr($func, 0, 6) !== 'array_')
-        {
             throw new \BadMethodCallException(__CLASS__.'->'.$func);
-        }
+
         return call_user_func_array($func, array_merge(array($this->getArrayCopy()), $argv));
     }
 
     /**
-     * @TODO Be warned, the parameters are backwards from what you might expect.
+     * Return the keys present on this object
      *
-     * This is to allow for downgrades or people already using the base append() method
+     * This is a quick helper method to assist IDE's with intellisense.
      *
-     * @link http://www.php.net/manual/en/arrayobject.append.php
-     *
-     * @param mixed $value
-     * @param null $index
-     * @return mixed
+     * @return array
      */
-    public function append($value, $index = null)
+    public function array_keys()
     {
-        $this->offsetSet($index, $value);
+        return $this->_propertyKeys;
+    }
+
+    /**
+     * @param callable $func
+     * @return static
+     */
+    public function map(\Closure $func)
+    {
+        return new static(array_map($func, $this->getArrayCopy()));
+    }
+
+    /**
+     * @param callable $closure
+     * @return static
+     */
+    public function filter(\Closure $closure)
+    {
+        return new static(array_map($closure, $this->getArrayCopy()));
+    }
+
+    /**
+     * @param $value
+     * @return bool
+     */
+    public function contains($value)
+    {
+        foreach($this as $k=>$v)
+        {
+            if ($value === $v)
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param callable $closure
+     * @return bool
+     */
+    public function exists(\Closure $closure)
+    {
+        foreach($this as $k=>$v)
+        {
+            if ($closure($k, $v))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param mixed $index
+     * @param mixed $value
+     */
+    public function set($index, $value)
+    {
+        parent::offsetSet($index, $value);
+
+        if (!in_array($index, $this->_propertyKeys, true))
+            $this->_propertyKeys[] = ($index === null ? $this->_numericalIndex++ : $index);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function append($value)
+    {
+        $this->set(null, $value);
     }
 
     /**
@@ -79,10 +163,26 @@ class ExtensibleArrayObject extends \ArrayObject
      */
     public function offsetSet($index, $newval)
     {
-        parent::offsetSet($index, $newval);
+        $this->set($index, $newval);
+    }
 
-        if (!in_array($index, $this->propertyKeys, true))
-            $this->propertyKeys[] = $index;
+    /**
+     * @param $index
+     * @return mixed
+     */
+    public function remove($index)
+    {
+        $idx = array_search($index, $this->_propertyKeys, true);
+
+        if ($idx === false)
+            return null;
+
+        $removed = $this[$index];
+
+        parent::offsetUnset($index);
+        unset($this->_propertyKeys[$idx]);
+
+        return $removed;
     }
 
     /**
@@ -90,13 +190,30 @@ class ExtensibleArrayObject extends \ArrayObject
      */
     public function offsetUnset($index)
     {
-        parent::offsetUnset($index);
-        $idx = array_search($index, $this->propertyKeys, true);
-        if ($idx !== false)
-            unset($this->propertyKeys[$idx]);
+        $this->remove($index);
     }
 
     /**
+     * @param $index
+     * @return bool
+     */
+    public function containsKey($index)
+    {
+        return in_array($index, $this->_propertyKeys, true);
+    }
+
+    /**
+     * @param mixed $index
+     * @return bool
+     */
+    public function offsetExists($index)
+    {
+        return $this->containsKey($index);
+    }
+
+    /**
+     * Does this ArrayObject contain elements?
+     *
      * @return bool
      */
     public function isEmpty()
@@ -105,12 +222,27 @@ class ExtensibleArrayObject extends \ArrayObject
     }
 
     /**
+     * Get first element
+     *
      * @return mixed
      */
     public function first()
     {
-        if (!$this->isEmpty() && count($this->propertyKeys) > 0)
-            return $this[reset($this->propertyKeys)];
+        if (!$this->isEmpty())
+            return $this[reset($this->_propertyKeys)];
+
+        return null;
+    }
+
+    /**
+     * Get last element
+     *
+     * @return null
+     */
+    public function last()
+    {
+        if (!$this->isEmpty())
+            return $this[end($this->_propertyKeys)];
 
         return null;
     }
