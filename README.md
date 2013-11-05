@@ -8,7 +8,7 @@ Included Helpers
 
 - JSON To UL
 - DOMPlus
-- JSONWriterPlus
+- JsonWriterPlus
 - XMLWriterPlus
 - ExtensibleArrayObject
 - KeyValuePair

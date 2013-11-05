@@ -1,10 +1,10 @@
 <?php namespace DCarbone\Helpers;
 
 /**
- * Class JSONWriterPlus
+ * Class JsonWriterPlus
  * @package DCarbone\Helpers
  */
-class JSONWriterPlus
+class JsonWriterPlus
 {
     /**
      * str_replace search value(s)
@@ -39,8 +39,8 @@ class JSONWriterPlus
     public $regexpReplaceCharacters = array();
 
     /**
-     * JSONObject Instance
-     * @var JSONObject
+     * JsonObject Instance
+     * @var JsonObject
      */
     protected $writer = null;
 
@@ -200,14 +200,14 @@ class JSONWriterPlus
     {
         if (!$this->started)
         {
-            $this->writer = new JSONObject;
+            $this->writer = new JsonObject;
             return $this->started = true;
         }
         return false;
     }
 
     /**
-     * End current JSONObject editing
+     * End current JsonObject editing
      *
      * @return  Boolean
      */
