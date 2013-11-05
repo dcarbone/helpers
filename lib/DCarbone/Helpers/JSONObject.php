@@ -1,12 +1,10 @@
 <?php namespace DCarbone\Helpers;
 
-use \stdClass;
-
 /**
- * Class JSONObject
+ * Class JsonObject
  * @package DCarbone\DCJSONWriter
  */
-class JSONObject
+class JsonObject
 {
     /**
      * The data housed in this object
@@ -46,7 +44,7 @@ class JSONObject
      */
     public function startObject()
     {
-        $obj = new stdClass;
+        $obj = new \stdClass;
 
         if ($this->current === null && $this->data === null)
         {
