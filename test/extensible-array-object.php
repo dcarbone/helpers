@@ -1,11 +1,3 @@
-<?php
-date_default_timezone_set('UTC');
-$files = array();
-foreach(glob('./../lib/DCarbone/Helpers/*.php') as $file)
-    require $file;
-
-use DCarbone\Helpers\JsonToUL;
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,17 +17,16 @@ use DCarbone\Helpers\JsonToUL;
 </head>
 <body>
 <div id="header" class="container_16">
-    <h1 class="grid_16">DCarbone Helpers Test Pages</h1>
-    <p class="grid_16">
-        Click a link below to see the test page for the helper
-    </p>
+    <h1 class="grid_16">Extensible Array Object/h1>
 </div>
 <div id="content" class="container_16">
-    <ul class="grid_16">
-        <li><a href="./json-to-ul.php">JSON to UL</a></li>
-        <li><a href="./dom-plus.php">DOM Plus</a></li>
-<!--        <li><a href="./extensible-array-object.php">Extensible Array Object</a></li>-->
-    </ul>
+<?php
+date_default_timezone_set('UTC');
+$files = array();
+foreach(glob('./../lib/DCarbone/Helpers/*.php') as $file)
+    require $file;
+
+?>
 </div>
 <div id="footer" class="container_16">
 

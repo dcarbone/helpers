@@ -326,4 +326,4 @@ class JsonWriterPlus
         // Else, perform encoding conversion
         return mb_convert_encoding($string, "UTF-8", $detect);
     }
-} 
+}
