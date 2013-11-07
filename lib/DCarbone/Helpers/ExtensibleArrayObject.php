@@ -34,14 +34,14 @@ class ExtensibleArrayObject extends \ArrayObject
      * @param array $input
      * @param int $flags
      * @param string $iterator_class
+     * @throws \Exception
      */
     public function __construct($input = array(), $flags = 0, $iterator_class = 'ArrayIterator')
     {
-        if (is_array($input))
-            $this->_propertyKeys = array_keys($input);
-        else if (is_object($input))
-            $this->_propertyKeys = array_keys(get_object_vars($input));
+        if (!is_array($input))
+            throw new \Exception('ExtensibleArrayObject expects parameter $input to of type array');
 
+        $this->_propertyKeys = array_keys($input);
         parent::__construct($input, $flags, $iterator_class);
     }
 
