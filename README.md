@@ -96,9 +96,9 @@ The following interfaces are implemented:
 - <a href="http://us1.php.net/manual/en/class.serializable.php" target="_blank">\Serializable</a>
 - <a href="http://php.net/manual/en/class.jsonserializable.php" target="_blank">\JsonSerializable</a>
 
-*USERS OF PHP < 5.4*
+#### USERS OF PHP < 5.4
 
 Be warned that the JsonSerializable interface was not implemented until 5.4.0.  I have included a
 <a href="https://github.com/dcarbone/helpers/blob/master/lib/DCarbone/Helpers/JsonSerializable.php">definition of this interface</a>
 in this Helpers library for compatibility, however you WILL NOT be able to call
-```php json_encode($myobj);``` while under PHP 5.3!
+```json_encode($myobj);``` while under PHP 5.3!
