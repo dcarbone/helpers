@@ -38,7 +38,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * This method allows you to call any of PHP's built-in array_* methods that would
      * normally expect an array parameter.
      *
-     * Example: $myobj = new ExtensibleArrayObject(array('b','c','d','e','a','z')):
+     * Example: $myobj = new $concreteClass(array('b','c','d','e','a','z')):
      *
      * $myobj->array_keys();  returns array(0, 1, 2, 3, 4, 5)
      *
