@@ -6,7 +6,7 @@ A series of little PHP helper classes
 Included Helpers
 ----------------
 
-- JSON To UL
+- JsonToUl
 - DOMPlus
 - JsonWriterPlus
 - XMLWriterPlus
@@ -45,7 +45,7 @@ $jsonString = <<<STRING
 }
 STRING;
 
-echo JSONToUl::invoke($jsonString);
+echo JsonToUl::invoke($jsonString);
 
 ```
 
@@ -61,7 +61,7 @@ elements from the output string (doctype, html, header, body).
 
 It is an extension of the base DOMDocument class, so it has all of the same methods the base class does.  What is available depends on the version of PHP you are running.
 
-If you have a version of PHP >= 5.3.6, it defers to base method functionality.
+If you have a version of PHP >= 5.3.6, it uses base method functionality.
 
 ```php
 $dom = new DOMPlus();
