@@ -23,11 +23,11 @@ The primary purpose of this class is to bring OO-style functionality to a world 
 
 There is nothing wrong with doing procedural-based code if you are comfortable with it, however as times change so must PHP.  There is a build-in class which attempts to do this same thing,
 which you can see here: <a href="http://php.net/manual/en/class.arrayobject.php" target="_blank">ArrayObject</a>, however
-in my testing with this class even low to mid complexity maps such as ArrayObject<Int|String, ArrayObject<Int|String, ArrayObject<Int|String,String>>> notation
+in my testing with this class even low to mid complexity maps such as ArrayObject\<Int|String, ArrayObject\<Int|String, ArrayObject\<Int|String,String>>> notation
 (parent with children who also have children, etc) wherein I had custom classes extending the base ArrayObject class, I ran into some
 fundamental issues with ArrayObject and was ultimately unable to use it for what I desired.
 
-To this end, I have written my own class which replicates _to a point_ the functionality of the built-in class, while adding
+To this end, I have written my own class which replicates, _to a point_, the functionality of the built-in class, while adding
 some additional features from the absolutely excellent <a href="http://www.doctrine-project.org/" target="_blank">Doctrine Project</a>
 <a href="http://www.doctrine-project.org/api/common/2.4/source-class-Doctrine.Common.Collections.ArrayCollection.html" target="_blank">ArrayCollection</a> class.
 Lots of thanks goes to the <a href="http://www.doctrine-project.org/about.html" target="_blank">Doctrine Team</a> for the inspiration
