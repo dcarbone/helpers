@@ -104,6 +104,8 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
    }
 
     /**
+     * Set a value on this collection
+     *
      * @param mixed $key
      * @param mixed $value
      * @return bool
@@ -127,6 +129,45 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
     }
 
     /**
+     * Try to determine if an identical element is already in this collection
+     *
+     * @param mixed $element
+     * @return bool
+     */
+    public function contains($element)
+    {
+        return in_array($element, $this->_dataSet, true);
+    }
+
+    /**
+     * Custom "contains" method
+     *
+     * @param callable $func
+     * @return bool
+     */
+    public function exists(\Closure $func)
+    {
+        foreach($this->_dataSet as $key=>$element)
+        {
+            if ($func($key, $element))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Return index of desired key
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    public function indexOf($value)
+    {
+        return array_search($value, $this->_dataSet, true);
+    }
+
+    /**
      * Remove and return an element
      *
      * @param $index
@@ -140,6 +181,63 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
         $removed = $this->offsetGet($index);
         $this->offsetUnset($index);
         return $removed;
+    }
+
+    /**
+     * @param $element
+     * @return bool
+     */
+    public function removeElement($element)
+    {
+        $key = array_search($element, $this->_dataSet, true);
+
+        if ($key === false)
+            return false;
+
+        $this->offsetUnset($key);
+        return true;
+    }
+
+    /**
+     * Get an Iterator instance for this data set
+     *
+     * @return \ArrayIterator
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->_dataSet);
+    }
+
+    /**
+     * Applies array_map to this dataset, and returns a new object.
+     *
+     * @link http://us1.php.net/array_map
+     *
+     * They scope "static" is used so that an instance of the extended class is returned.
+     *
+     * @param callable $func
+     * @return static
+     */
+    public function map(\Closure $func)
+    {
+        return new static(array_map($func, $this->_dataSet));
+    }
+
+    /**
+     * Filter internal dataset using closure
+     *
+     * @param callable $func
+     * @return bool
+     */
+    public function filter(\Closure $func)
+    {
+        foreach($this->_dataSet as $key=>$element)
+        {
+            if (!$func($key, $element))
+                return false;
+        }
+
+        return true;
     }
 
     /**
@@ -176,6 +274,141 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
             return null;
 
         return end($this->_dataSet);
+    }
+
+    /**
+     * Sort values by standard PHP sort method
+     *
+     * @link http://www.php.net/manual/en/function.sort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function sort($flags = SORT_REGULAR)
+    {
+        $sort = @sort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Reverse sort values
+     *
+     * @link http://www.php.net/manual/en/function.rsort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function rsort($flags = SORT_REGULAR)
+    {
+        $sort = @rsort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Sort values by custom function
+     *
+     * @link http://www.php.net/manual/en/function.usort.php
+     *
+     * @param string|array $func
+     * @return bool
+     */
+    public function usort($func)
+    {
+        $sort = @usort($this->_dataSet, $func);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Sort by keys
+     *
+     * @link http://www.php.net/manual/en/function.ksort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function ksort($flags = SORT_REGULAR)
+    {
+        $sort = @ksort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Reverse sort by keys
+     *
+     * @link http://www.php.net/manual/en/function.krsort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function krsort($flags = SORT_REGULAR)
+    {
+        $sort = @krsort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Sort by keys with custom function
+     *
+     * http://www.php.net/manual/en/function.uksort.php
+     *
+     * @param string|array $func
+     * @return bool
+     */
+    public function uksort($func)
+    {
+        $sort = @uksort($this->_dataSet, $func);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Sort values while retaining indices.
+     *
+     * @link http://www.php.net/manual/en/function.asort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function asort($flags = SORT_REGULAR)
+    {
+        $sort = @asort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Reverse sort values while retaining indices
+     *
+     * @link http://www.php.net/manual/en/function.arsort.php
+     *
+     * @param int $flags
+     * @return bool
+     */
+    public function arsort($flags = SORT_REGULAR)
+    {
+        $sort = @arsort($this->_dataSet, $flags);
+        $this->updateKeys();
+        return $sort;
+    }
+
+    /**
+     * Sort values while preserving indices with custom function
+     *
+     * @link http://www.php.net/manual/en/function.uasort.php
+     *
+     * @param $func
+     * @return bool
+     */
+    public function uasort($func)
+    {
+        $sort = @uasort($this->_dataSet, $func);
+        $this->updateKeys();
+        return $sort;
     }
 
     /**
