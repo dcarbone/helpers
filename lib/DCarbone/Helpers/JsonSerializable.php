@@ -17,7 +17,7 @@ else
     interface JsonSerializable
     {
         /**
-         * @return mixed
+         * @return array
          */
         public function jsonSerialize();
     }

@@ -93,10 +93,13 @@ class XMLWriterPlus
 
     /**
      * Destructor
+     *
+     * @link http://www.php.net/manual/en/function.xmlwriter-flush.php
      */
     public function __destruct()
     {
-        $this->writer->flush();
+        if ($this->started === true && $this->writer instanceof \XMLWriter)
+            $this->writer->flush();
     }
 
     /**
