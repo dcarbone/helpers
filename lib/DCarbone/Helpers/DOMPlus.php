@@ -144,4 +144,66 @@ class DOMPlus extends \DOMDocument
                 ($windowsLineEndings === true ? str_replace("\n", "\r\n", $this->saveHTML($node)) : $this->saveHTML($node)));
         }
     }
+
+    /**
+     * @param \DOMNode $element
+     * @param array $seek
+     * @param array $stop
+     * @param null|string $nodeValueRegex
+     * @return \DOMNode|null
+     */
+    public function getNextSiblingElement(\DOMNode &$element = null, array $seek, array $stop = array(), $nodeValueRegex = null)
+    {
+        if ($element !== null && in_array($element->nodeName, $seek))
+            $element = $element->nextSibling;
+
+        while ($element !== null)
+        {
+            if (in_array($element->nodeName, $stop))
+                return null;
+
+            if (in_array($element->nodeName, $seek))
+            {
+                if ($nodeValueRegex !== null && preg_match($nodeValueRegex, $element->nodeValue))
+                    return $element;
+                else if ($nodeValueRegex === null)
+                    return $element;
+            }
+
+            $element = $element->nextSibling;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param \DOMNode $element
+     * @param array $seek
+     * @param array $stop
+     * @param null|string $nodeValueRegex
+     * @return \DOMNode|null
+     */
+    public function getPreviousSiblingElement(\DOMNode &$element = null, array $seek, array $stop = array(), $nodeValueRegex = null)
+    {
+        if ($element !== null && in_array($element->nodeName, $seek))
+            $element = $element->previousSibling;
+
+        while ($element !== null)
+        {
+            if (in_array($element->nodeName, $stop))
+                return null;
+
+            if (in_array($element->nodeName, $seek))
+            {
+                if ($nodeValueRegex !== null && preg_match($nodeValueRegex, $element->nodeValue))
+                    return $element;
+                else if ($nodeValueRegex === null)
+                    return $element;
+            }
+
+            $element = $element->previousSibling;
+        }
+
+        return null;
+    }
 }

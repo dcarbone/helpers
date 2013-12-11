@@ -296,3 +296,18 @@ $element = $dom->getElementById('id of element');
 
 echo $dom->saveHTMLExact($element);
 ```
+
+I have also added two convenience methods:
+
+```php
+public function getNextSiblingElement(\DOMNode &$element = null, array $seek, array $stop = array(), $nodeValueRegex = null)
+
+public function getPreviousSiblingElement(\DOMNode &$element = null, array $seek, array $stop = array(), $nodeValueRegex = null)
+```
+
+The above two methods will iterate through $element's siblings until:
+
+1. The sibling's node name is found in the $seek array (returns sibling)
+  * If the $nodeValueRegex parameter is defined, the sibling element will only be returned if it's nodeValue is matched
+2. The sibling's node name is found in the $stop array (returns null)
+3. The next/previousSibling parameter is found to be null
