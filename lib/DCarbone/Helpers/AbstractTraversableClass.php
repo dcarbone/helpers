@@ -513,9 +513,8 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.1.0)
      * Seeks to a position
      * @link http://php.net/manual/en/seekableiterator.seek.php
-     * @param int $position <p>
-     * The position to seek to.
-     * </p>
+     * @param int $position The position to seek to.
+     * 
      * @throws \OutOfBoundsException
      * @return void
      */
@@ -532,12 +531,10 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.0.0)
      * Whether a offset exists
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
+     * @param mixed $offset An offset to check for.
+     * 
      * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
+     * 
      * The return value will be casted to boolean if non-boolean was returned.
      */
     public function offsetExists($offset)
@@ -549,9 +546,8 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.0.0)
      * Offset to retrieve
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     * The offset to retrieve.
-     * </p>
+     * @param mixed $offset The offset to retrieve.
+     * 
      * @return mixed Can return all value types.
      */
     public function offsetGet($offset)
@@ -566,12 +562,10 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.0.0)
      * Offset to set
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     * The offset to assign the value to.
-     * </p>
-     * @param mixed $value <p>
-     * The value to set.
-     * </p>
+     * @param mixed $offset The offset to assign the value to.
+     * 
+     * @param mixed $value The value to set.
+     * 
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -588,9 +582,8 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.0.0)
      * Offset to unset
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     * The offset to unset.
-     * </p>
+     * @param mixed $offset The offset to unset.
+     * 
      * @throws \OutOfBoundsException
      * @return void
      */
@@ -609,8 +602,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php
      * @return int The custom count as an integer.
-     * </p>
-     * <p>
+     * 
      * The return value is cast to an integer.
      */
     public function count()
@@ -633,9 +625,8 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * (PHP 5 >= 5.1.0)
      * Constructs the object
      * @link http://php.net/manual/en/serializable.unserialize.php
-     * @param string $serialized <p>
-     * The string representation of the object.
-     * </p>
+     * @param string $serialized The string representation of the object.
+     * 
      * @return void
      */
     public function unserialize($serialized)

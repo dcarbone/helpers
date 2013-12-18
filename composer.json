@@ -7,8 +7,6 @@
         "php",
         "helpers",
         "helper",
-        "domdocument",
-        "smartdomdocument",
         "json",
         "output",
         "jsonwriter",
