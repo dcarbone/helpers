@@ -286,7 +286,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function sort($flags = SORT_REGULAR)
     {
-        $sort = @sort($this->_dataSet, $flags);
+        $sort = sort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -301,7 +301,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function rsort($flags = SORT_REGULAR)
     {
-        $sort = @rsort($this->_dataSet, $flags);
+        $sort = rsort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -316,7 +316,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function usort($func)
     {
-        $sort = @usort($this->_dataSet, $func);
+        $sort = usort($this->_dataSet, $func);
         $this->updateKeys();
         return $sort;
     }
@@ -331,7 +331,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function ksort($flags = SORT_REGULAR)
     {
-        $sort = @ksort($this->_dataSet, $flags);
+        $sort = ksort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -346,7 +346,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function krsort($flags = SORT_REGULAR)
     {
-        $sort = @krsort($this->_dataSet, $flags);
+        $sort = krsort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -361,7 +361,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function uksort($func)
     {
-        $sort = @uksort($this->_dataSet, $func);
+        $sort = uksort($this->_dataSet, $func);
         $this->updateKeys();
         return $sort;
     }
@@ -376,7 +376,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function asort($flags = SORT_REGULAR)
     {
-        $sort = @asort($this->_dataSet, $flags);
+        $sort = asort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -391,7 +391,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function arsort($flags = SORT_REGULAR)
     {
-        $sort = @arsort($this->_dataSet, $flags);
+        $sort = arsort($this->_dataSet, $flags);
         $this->updateKeys();
         return $sort;
     }
@@ -406,7 +406,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function uasort($func)
     {
-        $sort = @uasort($this->_dataSet, $func);
+        $sort = uasort($this->_dataSet, $func);
         $this->updateKeys();
         return $sort;
     }
