@@ -23,14 +23,28 @@ class TableMapper
 
     /**
      * @param \DOMElement $table
+     * @param \DOMDocument $dom
+     * @param \DOMXPath $xpath
      */
-    public function __construct(\DOMElement $table)
+    public function __construct(\DOMElement &$table, \DOMDocument &$dom = null, \DOMXPath &$xpath = null)
     {
-        $this->dom = new \DOMDocument('1.0', 'UTF-8');
-        $this->xpath = new \DOMXPath($this->dom);
-        $imported = $this->dom->importNode($table->cloneNode(true), true);
-        $this->dom->appendChild($imported);
-        $this->table = $imported;
+        if ($dom === null)
+        {
+            $this->dom = new \DOMDocument('1.0', 'UTF-8');
+            $imported = $this->dom->importNode($table->cloneNode(true), true);
+            $this->dom->appendChild($imported);
+            $this->table = $imported;
+        }
+        else
+        {
+            $this->dom = &$dom;
+            $this->table = &$table;
+        }
+
+        if ($xpath === null)
+            $this->xpath = new \DOMXPath($this->dom);
+        else
+            $this->xpath = &$xpath;
     }
 
     /**
