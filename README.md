@@ -250,8 +250,8 @@ $json = json_encode($parent->jsonSerialize());
 <table>
     <tbody>
         <tr>
-            <td rowspan="3">Row 0 : Cell 0</td>
-            <td colspan="2">Row 0 : Cell 1</td>
+            <td colspan="3">Row 0 : Cell 0</td>
+            <td rowspan="2">Row 0 : Cell 1</td>
         </tr>
         <tr>
             <td>Row 1 : Cell 0</td>
