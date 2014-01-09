@@ -238,6 +238,16 @@ class TableMapper
     }
 
     /**
+     * @param int $groupNum
+     * @param int $rowNum
+     * @return \DOMElement
+     */
+    public function getTR($groupNum, $rowNum)
+    {
+        return $this->rowGroups[$groupNum][$rowNum];
+    }
+
+    /**
      * @return array
      */
     public function getRowCellMap()
@@ -317,25 +327,20 @@ class TableMapper
             {
                 echo '<tr>';
 
-                for ($celli = 0, $tdi = 0; $celli < count($cellMap); $celli++)
+                for ($celli = 0; $celli < count($cellMap); $celli++)
                 {
                     $cell = $cellMap[$celli];
                     $exp = explode(':', $cell);
                     $rowOffset = (int)$exp[0];
                     $tdOffset = (int)$exp[1];
+
+                    $nodeValue = null;
                     if ($rowOffset >= 0)
-                    {
-                        echo '<td>';
-                        echo $this->rowGroups[$groupi][$rowi]->childNodes->item($tdOffset)->nodeValue;
-                        echo '</td>';
-                        $tdi++;
-                    }
+                        $nodeValue = $this->rowGroups[$groupi][$rowi]->childNodes->item($tdOffset)->nodeValue;
                     else
-                    {
-                        echo '<td>';
-                        echo $this->rowGroups[$groupi][$rowi + $rowOffset]->childNodes->item($tdOffset)->nodeValue;
-                        echo '</td>';
-                    }
+                        $nodeValue = $this->rowGroups[$groupi][$rowi + $rowOffset]->childNodes->item($tdOffset)->nodeValue;
+
+                    echo "<td>{$nodeValue}</td>";
                 }
                 echo '</tr>';
             }
