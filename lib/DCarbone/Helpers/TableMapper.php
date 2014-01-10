@@ -124,7 +124,7 @@ class TableMapper
         $rowGroup[] = $firstTR;
 
         // $firstTR is always a row which does not have cells that extend from previous rows
-        for ($childi = 0; $childi < $firstTR->childNodes->length; $childi++)
+        for ($childi = 0, $celli = 0; $childi < $firstTR->childNodes->length; $childi++, $celli++)
         {
             /** @var \DOMElement $child */
             $child = $firstTR->childNodes->item($childi);
@@ -138,27 +138,18 @@ class TableMapper
             // If the child extends over multiple columns...
             if ($child->hasAttribute('colspan'))
             {
-                // ...and is the only child of this <tr>
-                if ($firstTR->childNodes->length === 1)
+                $colSpan = (int)$child->getAttribute('colspan');
+                for ($csi = 0; $csi < $colSpan; $csi++)
                 {
-                    for ($csi = 0; $csi < (int)$child->getAttribute('colspan'); $csi++)
-                    {
-                        $cellMap[0][$childi + $csi] = (string)($childRowSpan - 1).':'.$childi;
-                    }
+                    $cellMap[0][$celli + $csi] = (string)($childRowSpan - 1).':'.$childi;
                 }
-                // ...and is NOT the only child of this <tr>
-                else
-                {
-                    for ($csi = 0; $csi <= (int)$child->getAttribute('colspan'); $csi++)
-                    {
-                        $cellMap[0][$childi + $csi] = (string)($childRowSpan - 1).':'.$childi;
-                    }
-                }
+                $celli += ($colSpan - 1);
+
             }
             // ...else
             else
             {
-                $cellMap[0][$childi] = (string)($childRowSpan - 1).':'.$childi;
+                $cellMap[0][$celli] = (string)($childRowSpan - 1).':'.$childi;
             }
         }
 
@@ -172,14 +163,11 @@ class TableMapper
             // Add this row to the rows array
             $rowGroup[] = $tr;
 
-            // Get any citation keys present in this row
-//            $citationKeys = $citationKeys + $this->getRowCitationKeys($tr, $legendNodeArray);
-
             // Define this row's area in $rowCells
             $cellMap[$tri] = array();
 
             // Loop through and build the rowCell array.
-            for($celli = 0, $tdi = 0; $celli < count($cellMap[0]); $celli++)
+            for($celli = 0, $childi = 0; $celli < count($cellMap[0]); $celli++)
             {
                 $previous = $cellMap[$tri - 1][$celli];
                 $exp = explode(':', $previous);
@@ -194,15 +182,32 @@ class TableMapper
                 // If 0, then use <td> present in the current row
                 else if ($prevRowSpan === 0)
                 {
-                    $child = $tr->childNodes->item($tdi);
-                    $currRowSpan = ($child->hasAttribute('rowspan') ? (int)$child->getAttribute('rowspan') : 1);
+                    $child = $tr->childNodes->item($childi);
+                    $childRowSpan = ($child->hasAttribute('rowspan') ? (int)$child->getAttribute('rowspan') : 1);
 
-                    if ($currRowSpan === 1)
-                        $cellMap[$tri][$celli] = '0:'.$tdi;
+                    // If the child extends over multiple columns...
+                    if ($child->hasAttribute('colspan'))
+                    {
+                        $colSpan = (int)$child->getAttribute('colspan');
+                        for ($csi = 0; $csi < $colSpan; $csi++)
+                        {
+                            if ($childRowSpan === 1)
+                                $cellMap[$tri][$celli + $csi] = '0:'.$childi;
+                            else
+                                $cellMap[$tri][$celli + $csi] = (($childRowSpan- 1) + $tri).':'.$childi;
+                        }
+                        $celli += ($colSpan - 1);
+
+                    }
+                    else if ($childRowSpan === 1)
+                    {
+                        $cellMap[$tri][$celli] = '0:'.$childi;
+                    }
                     else
-                        $cellMap[$tri][$celli] = (($currRowSpan - 1) + $tri).':'.$tdi;
-
-                    $tdi++;
+                    {
+                        $cellMap[$tri][$celli] = (($childRowSpan - 1) + $tri).':'.$childi;
+                    }
+                    $childi++;
                 }
                 // If this value is negative it means that the previous row's <td> was defined by a row further up
                 else if ($prevRowSpan < 0)
@@ -218,15 +223,15 @@ class TableMapper
                     }
                     else if ($sourceRowSpan < $tri)
                     {
-                        $child = $tr->childNodes->item($tdi);
+                        $child = $tr->childNodes->item($childi);
                         $currRowSpan = ($child->hasAttribute('rowspan') ? (int)$child->getAttribute('rowspan') : 1);
 
                         if ($currRowSpan === 1)
-                            $cellMap[$tri][$celli] = '0:'.$tdi;
+                            $cellMap[$tri][$celli] = '0:'.$childi;
                         else
-                            $cellMap[$tri][$celli] = (($currRowSpan - 1) + $tri).':'.$tdi;
+                            $cellMap[$tri][$celli] = (($currRowSpan - 1) + $tri).':'.$childi;
 
-                        $tdi++;
+                        $childi++;
                     }
                 }
             }
