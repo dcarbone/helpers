@@ -1,27 +1,25 @@
 <?php namespace DCarbone\Helpers;
 
-use DCarbone\Helpers\DOMPlus;
-
 /**
  * Class JsonToUL
  * @package DCarbone
  */
-class JsonToUL
+class JsonToList
 {
     /**
      * Invoke the helper
      *
      * @param $jsonString
-     * @param bool $returnDOM
-     * @return DOMPlus|mixed|string
+     * @param bool $returnNode
+     * @return \DOMNode|string
      */
-    public static function invoke($jsonString, $returnDOM = false)
+    public static function invoke($jsonString, $returnNode = false)
     {
-        $dom = new DOMPlus('1.0', 'UTF-8');
+        $dom = new \DOMDocument('1.0', 'UTF-8');
 
         $jsonString = mb_convert_encoding($jsonString, 'UTF-8', mb_detect_encoding($jsonString));
 
-        $jsonDecode = json_decode($jsonString);
+        $jsonDecode = json_decode($jsonString, false);
 
         $ul = $dom->createElement('ul');
         $ul->setAttribute('class', 'json-list');
@@ -32,21 +30,34 @@ class JsonToUL
         else if (is_array($jsonDecode))
             self::arrayOutput($jsonDecode, $dom, $ul);
 
-        if ($returnDOM === false)
-            return $dom->saveHTMLExact($ul);
-        else
-            return $dom;
+        if ($returnNode === false)
+            return static::saveHTMLExact($dom, $ul);
+
+        return $dom;
     }
 
     /**
-     * Parse through JSON Object
+     * @param \DOMDocument $dom
+     * @param \DOMNode $node
+     * @return mixed|string
+     */
+    protected static function saveHTMLExact(\DOMDocument $dom, \DOMNode $node)
+    {
+        if ($dom !== null && defined('PHP_VERSION_ID') && PHP_VERSION_ID >= 50306)
+            return $dom->saveHTML($node);
+
+        return preg_replace(array("/^<!DOCTYPE.*?<body>/si", "#</body>.*</html>$#si"), '', $dom->saveHTML());
+    }
+
+    /**
+     * Parse through json object
      *
      * @param \stdClass $object
-     * @param \DCarbone\Helpers\DOMPlus
+     * @param \DOMDocument $dom
      * @param \DOMElement $parentUL
-     * @return \DCarbone\Helpers\DOMPlus
+     * @return \DOMDocument
      */
-    protected static function objectOutput(\stdClass $object, DOMPlus &$dom, \DOMElement &$parentUL)
+    protected static function objectOutput(\stdClass $object, \DOMDocument $dom, \DOMElement $parentUL)
     {
         foreach($object as $k=>$v)
         {
@@ -87,14 +98,14 @@ class JsonToUL
     }
 
     /**
-     * Parse through JSON Array
+     * Parse through json array
      *
      * @param array $array
-     * @param \DCarbone\Helpers\DOMPlus
+     * @param \DOMDocument $dom
      * @param \DOMElement $parentUL
-     * @return \DCarbone\Helpers\DOMPlus
+     * @return \DOMDocument
      */
-    protected static function arrayOutput(array $array, DOMPlus &$dom, \DOMElement &$parentUL)
+    protected static function arrayOutput(array $array, \DOMDocument $dom, \DOMElement $parentUL)
     {
         foreach($array as $value)
         {

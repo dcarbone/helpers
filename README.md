@@ -6,7 +6,7 @@ A series of little PHP helper classes
 Included Helpers
 ----------------
 
-- JsonToUl
+- JsonToList
 - JsonWriterPlus
 - XMLWriterPlus
 - AbstractTraversableClass
@@ -318,7 +318,7 @@ Which looks like this:
     </tbody>
 </table>
 
-### JSON To UL
+### JsonToList
 
 ```php
 $jsonString = <<<STRING
@@ -346,6 +346,9 @@ $jsonString = <<<STRING
 }
 STRING;
 
-echo JsonToUl::invoke($jsonString);
+echo JsonToList::invoke($jsonString);
+
+// Alternatively you can have a \DOMDocument object returned to you
+$dom = JsonToList::invoke($jsonString, true);
 
 ```
