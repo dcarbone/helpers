@@ -9,9 +9,9 @@ use DCarbone\Helpers\JsonWriterPlus;
 interface IJsonWritable
 {
     /**
-     * @param JsonWriterPlus $writer
+     * @param JsonWriterPlus $jsonWriter
      * @param IJsonWritable $data
      * @return mixed
      */
-    public function buildJson(JsonWriterPlus &$writer, IJsonWritable &$data = null);
+    public function buildJson(JsonWriterPlus &$jsonWriter, IJsonWritable &$data = null);
 }

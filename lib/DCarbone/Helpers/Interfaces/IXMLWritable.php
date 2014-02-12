@@ -9,9 +9,9 @@ use DCarbone\Helpers\XMLWriterPlus;
 interface IXMLWritable
 {
     /**
-     * @param XMLWriterPlus $writer
+     * @param XMLWriterPlus $xmlWriter
      * @param IXMLWritable $data
      * @return mixed
      */
-    public function buildXML(XMLWriterPlus &$writer, IXMLWritable &$data = null);
+    public function buildXML(XMLWriterPlus &$xmlWriter, IXMLWritable &$data = null);
 }
