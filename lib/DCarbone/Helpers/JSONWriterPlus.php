@@ -11,9 +11,9 @@ class JsonWriterPlus
      * @var array
      */
     public $strSearchCharacters = array(
-        "&#169;",
-        "&#xa9;",
-        "&copy;"
+        '&#169;',
+        '&#xa9;',
+        '&copy;'
     );
 
     /**
@@ -21,9 +21,9 @@ class JsonWriterPlus
      * @var array
      */
     public $strReplaceCharacters = array(
-        "\u00A9", // copyright symbol
-        "\u00A9",
-        "\u00A9"
+        '\u00A9', // copyright symbol
+        '\u00A9',
+        '\u00A9'
     );
 
     /**
@@ -67,7 +67,7 @@ class JsonWriterPlus
      * is editable
      *
      * @access  public
-     * @return  Boolean
+     * @return  bool
      */
     protected function canEdit()
     {
@@ -77,7 +77,7 @@ class JsonWriterPlus
     /**
      * Append a new object to the JSON output
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function writeStartObject()
     {
@@ -90,7 +90,7 @@ class JsonWriterPlus
     /**
      * End current object
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function writeEndObject()
     {
@@ -103,7 +103,7 @@ class JsonWriterPlus
     /**
      * Append new Array
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function writeStartArray()
     {
@@ -116,7 +116,7 @@ class JsonWriterPlus
     /**
      * End current Array
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function writeEndArray()
     {
@@ -129,8 +129,8 @@ class JsonWriterPlus
     /**
      * Write object property
      *
-     * @param   String  $property  Property Name
-     * @return  Boolean
+     * @param   string  $property  Property Name
+     * @return  bool
      */
     public function writeObjectPropertyName($property)
     {
@@ -143,8 +143,8 @@ class JsonWriterPlus
     /**
      * Defines a property with value of string
      *
-     * @param   String  $property  Name of Property
-     * @param   String  $value     Value of Property
+     * @param   string  $property  Name of Property
+     * @param   string  $value     Value of Property
      * @return  Bool
      */
     public function writeObjectProperty($property, $value)
@@ -159,11 +159,11 @@ class JsonWriterPlus
     }
 
     /**
-     * Write String Value to Array or Object
+     * Write string Value to Array or Object
      *
-     * @param   String $value  Value
+     * @param   string $value  Value
      * @throws \InvalidArgumentException
-     * @return  Boolean
+     * @return  bool
      */
     public function writeValue($value)
     {
@@ -173,16 +173,16 @@ class JsonWriterPlus
             // try to convert it to string.  At this point, writeValue MUST be scalar!
             if (!is_scalar($value))
             {
-                $typecast = settype($value, 'string');
+                $typecast = @settype($value, 'string');
 
                 if ($typecast === false)
-                    throw new \InvalidArgumentException("Cannot cast non-scalar value to string (did you forget to define a __toString on your object?)");
+                    throw new \InvalidArgumentException("Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)");
             }
 
             if (is_string($value))
             {
                 $value = $this->convertCharacters($value);
-                $value = $this->encodeString($value);
+                $value = $this->encodestring($value);
             }
 
             return $this->writer->writeValue($value);
@@ -192,9 +192,84 @@ class JsonWriterPlus
     }
 
     /**
+     * @param mixed $object
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public function appendObject($object)
+    {
+        if ($this->canEdit())
+        {
+            if (!is_object($object))
+                throw new \InvalidArgumentException('Passed non-object to appendObject');
+
+            $this->writeStartObject();
+            foreach($object as $key=>$value)
+            {
+                if (is_scalar($value))
+                {
+                    $this->writeObjectProperty($key, $value);
+                }
+                else if (is_array($value))
+                {
+                    $this->writeObjectPropertyName($key);
+                    $this->appendArray($value);
+                }
+                else if (is_object($value))
+                {
+                    $this->writeObjectPropertyName($key);
+                    $this->appendObject($value);
+                }
+                else
+                {
+                    throw new \InvalidArgumentException('Value of type '.gettype($value).' seen during appendObject call');
+                }
+            }
+            $this->writeEndObject();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $array
+     * @return bool
+     * @throws \InvalidArgumentException
+     */
+    public function appendArray(array $array)
+    {
+        if ($this->canEdit())
+        {
+            foreach(array_keys($array) as $key)
+            {
+                if (!is_int($key))
+                    return $this->appendObject((object)$array);
+            }
+
+            $this->writeStartArray();
+            foreach($array as $key=>$value)
+            {
+                if (is_scalar($value))
+                    $this->writeValue($value);
+                else if (is_array($value))
+                    $this->appendArray($value);
+                else if (is_object($value))
+                    $this->appendObject($value);
+                else
+                    throw new \InvalidArgumentException('Value of type '.gettype($value).' seen during appendArray call');
+            }
+            $this->writeEndArray();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Initialize Data
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function startJSON()
     {
@@ -209,7 +284,7 @@ class JsonWriterPlus
     /**
      * End current JsonObject editing
      *
-     * @return  Boolean
+     * @return  bool
      */
     public function endJSON()
     {
@@ -225,9 +300,9 @@ class JsonWriterPlus
      * @link  http://php.net/manual/en/function.json-encode.php
      * @link  http://www.php.net/manual/en/json.constants.php
      *
-     * @param   Int $options  json_encode options
+     * @param   int $options  json_encode options
      * @throws \Exception
-     * @return  String
+     * @return  string
      */
     public function getJSON($options = 0)
     {
@@ -240,7 +315,7 @@ class JsonWriterPlus
     /**
      * Get the unencoded value of the writer
      *
-     * @return Mixed
+     * @return mixed
      */
     public function getUnencoded()
     {
@@ -248,11 +323,11 @@ class JsonWriterPlus
     }
 
     /**
-     * Convert characters for output in an XML file
+     * Convert characters
      *
-     * @param   String $string  Input String
+     * @param   string $string  Input string
      * @throws \InvalidArgumentException
-     * @return  String
+     * @return  string
      */
     protected function convertCharacters($string)
     {
@@ -308,11 +383,11 @@ class JsonWriterPlus
      * @link  http://php.net/manual/en/function.mb-detect-encoding.php
      * @link  http://www.php.net/manual/en/function.mb-convert-encoding.php
      *
-     * @param   String $string  un-encoded string
+     * @param   string $string  un-encoded string
      * @throws \InvalidArgumentException
-     * @return  String
+     * @return  string
      */
-    protected function encodeString($string)
+    protected function encodestring($string)
     {
         $detect = mb_detect_encoding($string);
 
