@@ -2,31 +2,31 @@
 
 /**
  * Class JsonObject
- * @package DCarbone\DCJSONWriter
+ * @package DCarbone\Helpers
  */
 class JsonObject
 {
     /**
      * The data housed in this object
-     * @var Mixed
+     * @var mixed
      */
     protected $data = null;
 
     /**
      * Currently Accessed Element
-     * @var Mixed
+     * @var mixed
      */
     protected $current = null;
 
     /**
      * Parent of the current element
-     * @var Mixed
+     * @var mixed
      */
     protected $parent = null;
 
     /**
      * Most recent key set in an object
-     * @var String
+     * @var string
      */
     protected $currentObjKey = null;
 
@@ -40,7 +40,7 @@ class JsonObject
      * Intialize a new object
      *
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function startObject()
     {
@@ -64,10 +64,10 @@ class JsonObject
     }
 
     /**
-     * "End" object
+     * 'End' object
      *
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function endObject()
     {
@@ -75,7 +75,7 @@ class JsonObject
             return false;
 
         if (!is_object($this->current))
-            throw new \Exception("Cannot end non-object with endObject");
+            throw new \Exception('Cannot end non-object with endObject');
 
         $this->current = &$this->parent;
         array_pop($this->pathKeys);
@@ -87,7 +87,7 @@ class JsonObject
      * Initialize Array
      *
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function startArray()
     {
@@ -109,10 +109,10 @@ class JsonObject
     }
 
     /**
-     * "End" Array
+     * 'End' Array
      *
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function endArray()
     {
@@ -120,7 +120,7 @@ class JsonObject
             return false;
 
         if (!is_array($this->current))
-            throw new \Exception("Cannot end non-array with endArray");
+            throw new \Exception('Cannot end non-array with endArray');
 
         unset($this->current);
         $this->current = &$this->parent;
@@ -132,14 +132,14 @@ class JsonObject
     /**
      * Append new Array or Object to current Object
      *
-     * @param  Mixed $data  Array or Object being appended
+     * @param  mixed $data  Array or Object being appended
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     protected function appendToObject($data)
     {
         if ($this->currentObjKey === null)
-            throw new \Exception("Cannot assign value without first assigning key to object");
+            throw new \Exception('Cannot assign value without first assigning key to object');
 
         $key = $this->currentObjKey;
         $this->current->$key = $data;
@@ -153,8 +153,8 @@ class JsonObject
     /**
      * Append new Array or Object to current Array
      *
-     * @param  Mixed  $data  Array or Object being appended
-     * @return Boolean
+     * @param  mixed  $data  Array or Object being appended
+     * @return bool
      */
     protected function appendToArray($data)
     {
@@ -168,20 +168,20 @@ class JsonObject
     /**
      * Write new property for Object
      *
-     * @param  String $propertyName  Name of property
+     * @param  string $propertyName  Name of property
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function writeObjectPropertyName($propertyName)
     {
         if (!is_string($propertyName) && !is_int($propertyName))
-            throw new \Exception("Can only assign String or Integer values to object property name!");
+            throw new \Exception('Can only assign string or Integer values to object property name!');
 
         if (!is_object($this->current))
-            throw new \Exception("Tried to write property value to non-object");
+            throw new \Exception('Tried to write property value to non-object');
 
         if ($this->currentObjKey !== null)
-            throw new \Exception("Cannot define new property without populating previous one");
+            throw new \Exception('Cannot define new property without populating previous one');
 
         $this->current->$propertyName = null;
         $this->currentObjKey = $propertyName;
@@ -191,14 +191,14 @@ class JsonObject
     /**
      * Write value to Array or Object
      *
-     * @param  String $value  Value to write
+     * @param  string $value  Value to write
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     public function writeValue($value)
     {
         if (!is_scalar($value))
-            throw new \Exception("Tried to write invalid value");
+            throw new \Exception('Tried to write invalid value');
 
         if (is_array($this->current))
             return $this->writeValueToArray($value);
@@ -212,8 +212,8 @@ class JsonObject
     /**
      * Appends string value to array
      *
-     * @param  String  $value  String to write
-     * @return Boolean
+     * @param  string  $value  string to write
+     * @return bool
      */
     protected function writeValueToArray($value)
     {
@@ -224,14 +224,14 @@ class JsonObject
     /**
      * Appends string value to object
      *
-     * @param  String $value  Value to write
+     * @param  string $value  Value to write
      * @throws \Exception
-     * @return Boolean
+     * @return bool
      */
     protected function writeValueToObject($value)
     {
         if ($this->currentObjKey === null)
-            throw new \Exception("Tried to define value without first defining key");
+            throw new \Exception('Tried to define value without first defining key');
 
         $key = $this->currentObjKey;
         $this->current->$key = $value;
@@ -242,7 +242,7 @@ class JsonObject
     /**
      * Find the parent of the current element
      *
-     * @return Void
+     * @return void
      */
     protected function getParent()
     {
@@ -256,13 +256,9 @@ class JsonObject
         {
             $k = $this->pathKeys[$i];
             if (is_object($parent))
-            {
                 $parent = &$parent->$k;
-            }
             else if (is_array($parent))
-            {
                 $parent = &$parent[$k];
-            }
         }
 
         $this->parent = &$parent;
@@ -271,7 +267,7 @@ class JsonObject
     /**
      * Returns the data
      *
-     * @return Mixed
+     * @return mixed
      */
     public function getData()
     {
