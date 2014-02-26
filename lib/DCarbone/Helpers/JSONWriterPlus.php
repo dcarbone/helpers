@@ -173,10 +173,15 @@ class JsonWriterPlus
             // try to convert it to string.  At this point, writeValue MUST be scalar!
             if (!is_scalar($value))
             {
-                $typecast = @settype($value, 'string');
-
+                try {
+                    $typecast = settype($value, 'string');
+                }
+                catch (\Exception $e) {
+                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)', null, $e);
+                }
+                
                 if ($typecast === false)
-                    throw new \InvalidArgumentException("Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)");
+                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)');
             }
 
             if (is_string($value))

@@ -8,19 +8,19 @@ class JsonObject
 {
     /**
      * The data housed in this object
-     * @var mixed
+     * @var array|\stdClass
      */
     protected $data = null;
 
     /**
      * Currently Accessed Element
-     * @var mixed
+     * @var array|\stdClass
      */
     protected $current = null;
 
     /**
      * Parent of the current element
-     * @var mixed
+     * @var array|\stdClass
      */
     protected $parent = null;
 
@@ -37,7 +37,7 @@ class JsonObject
     protected $pathKeys = array();
 
     /**
-     * Intialize a new object
+     * Initialize a new object
      *
      * @throws \Exception
      * @return bool
