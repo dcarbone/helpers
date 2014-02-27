@@ -177,17 +177,17 @@ class JsonWriterPlus
                     $typecast = settype($value, 'string');
                 }
                 catch (\Exception $e) {
-                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)', null, $e);
+                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __toString on your object?)', null, $e);
                 }
                 
                 if ($typecast === false)
-                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __tostring on your object?)');
+                    throw new \InvalidArgumentException('Cannot cast non-scalar value to string (did you forget to define a __toString on your object?)');
             }
 
             if (is_string($value))
             {
                 $value = $this->convertCharacters($value);
-                $value = $this->encodestring($value);
+                $value = $this->encodeString($value);
             }
 
             return $this->writer->writeValue($value);
@@ -312,7 +312,7 @@ class JsonWriterPlus
     public function getJSON($options = 0)
     {
         if (!is_int($options))
-            throw new \Exception("Cannot pass non-int value to GetJSON");
+            throw new \Exception('Cannot pass non-int value to getJSON');
 
         return json_encode($this->writer->getData(), $options);
     }
@@ -392,18 +392,18 @@ class JsonWriterPlus
      * @throws \InvalidArgumentException
      * @return  string
      */
-    protected function encodestring($string)
+    protected function encodeString($string)
     {
         $detect = mb_detect_encoding($string);
 
         if ($detect === false)
-            throw new \InvalidArgumentException("Could not convert string to UTF-8 for JSON output");
+            throw new \InvalidArgumentException('Could not convert string to UTF-8 for JSON output');
 
         // If the current encoding is already the requested encoding
-        if (is_string($detect) && strtolower($detect) === "utf-8")
+        if (is_string($detect) && strtolower($detect) === 'utf-8')
             return $string;
 
         // Else, perform encoding conversion
-        return mb_convert_encoding($string, "UTF-8", $detect);
+        return mb_convert_encoding($string, 'UTF-8', $detect);
     }
 }
