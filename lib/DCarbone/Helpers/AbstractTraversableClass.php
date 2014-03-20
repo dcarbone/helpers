@@ -12,7 +12,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * Used by Iterators
      * @var mixed
      */
-    private $_position;
+    private $_position = null;
     private $_positionKeys = array();
     private $_positionKeysPosition = 0;
 
@@ -102,6 +102,34 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
 
         return $this->_dataSet[$param];
    }
+
+    /**
+     * This method was inspired by Zend Framework 2.2.x PhpReferenceCompatibility class
+     *
+     * @link https://github.com/zendframework/zf2/blob/release-2.2.6/library/Zend/Stdlib/ArrayObject/PhpReferenceCompatibility.php#L179
+     *
+     * @param $dataSet
+     * @return array
+     * @throws \InvalidArgumentException
+     */
+    public function exchangeArray($dataSet)
+    {
+        if (!is_array($dataSet) && !is_object($dataSet))
+            throw new \InvalidArgumentException('AbstractTraversableClass::exchangeArray - "$dataSet" parameter expected to be array or object');
+
+        if ($dataSet instanceof \ArrayObject)
+            $dataSet = $dataSet->getArrayCopy();
+        else if ($dataSet instanceof static)
+            $dataSet = $dataSet->__toArray();
+        else if (!is_array($dataSet))
+            $dataSet = (array)$dataSet;
+
+        $storage = $this->_dataSet;
+        $this->_dataSet = $dataSet;
+        $this->updateKeys();
+        return $storage;
+    }
+
 
     /**
      * Set a value on this collection
@@ -431,7 +459,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function current()
     {
-        return ($this->_position === null ? false : $this->_dataSet[$this->_position]);
+        return (!isset($this->_position) || $this->_position === null ? false : $this->_dataSet[$this->_position]);
     }
 
     /**
