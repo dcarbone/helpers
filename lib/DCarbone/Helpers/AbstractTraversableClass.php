@@ -97,7 +97,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function __get($param)
     {
-        if (!isset($this->_dataSet[$param]))
+        if (!$this->offsetExists($param))
             throw new \OutOfRangeException('No data element with the key "'.$param.'" found');
 
         return $this->_dataSet[$param];
@@ -471,7 +471,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
     public function next()
     {
         $this->_positionKeysPosition++;
-        if (isset($this->_positionKeys[$this->_positionKeysPosition]))
+        if (array_key_exists($this->_positionKeysPosition, $this->_positionKeys))
             $this->_position = $this->_positionKeys[$this->_positionKeysPosition];
         else
             $this->_position = null;
@@ -497,7 +497,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function valid()
     {
-        return isset($this->_dataSet[$this->_position]);
+        return array_key_exists($this->_position, $this->_dataSet);
     }
 
     /**
@@ -509,7 +509,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
     public function rewind()
     {
         $this->_positionKeysPosition = 0;
-        if (isset($this->_positionKeys[$this->_positionKeysPosition]))
+        if (array_key_exists($this->_positionKeysPosition, $this->_positionKeys))
             $this->_position = $this->_positionKeys[$this->_positionKeysPosition];
         else
             $this->_position = null;
@@ -548,7 +548,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      */
     public function seek($position)
     {
-        if (!isset($this->_positionKeys[$position]))
+        if (!array_key_exists($position, $this->_positionKeys))
             throw new \OutOfBoundsException('Invalid seek position ('.$position.')');
 
         $this->_positionKeysPosition = $position;
