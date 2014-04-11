@@ -12,7 +12,6 @@ Included Helpers
 - AbstractTraversableClass
 - KeyValuePair
 - JsonSerializable
-- TableMapper
 
 Basic Usage
 -----------
@@ -239,84 +238,6 @@ I have added a custom JsonSerializable interface to maintain backward compatibil
 ```php
 $json = json_encode($parent->jsonSerialize());
 ```
-
-### TableMapper
-
-**TableMapper** is a class that I wrote to ease the consumption of complex HTML tables.
-
-**Example**:
-
-```html
-<table>
-    <tbody>
-        <tr>
-            <td colspan="3">Row 0 : Cell 0</td>
-            <td rowspan="2">Row 0 : Cell 1</td>
-        </tr>
-        <tr>
-            <td>Row 1 : Cell 0</td>
-            <td>Row 1 : Cell 1</td>
-            <td>Row 1 : Cell 2</td>
-        </tr>
-    </tbody>
-</table>
-```
-
-Looks something like this:
-
-<table>
-    <tbody>
-        <tr>
-            <td colspan="3">Row 0 : Cell 0</td>
-            <td rowspan="2">Row 0 : Cell 1</td>
-        </tr>
-        <tr>
-            <td>Row 1 : Cell 0</td>
-            <td>Row 1 : Cell 1</td>
-            <td>Row 1 : Cell 2</td>
-        </tr>
-    </tbody>
-</table>
-
-That can be tricky to consume, however.  So this class creates a clone of the table element you pass in and creates an in-memory version that looks like this:
-
-```html
-<table>
-    <tbody>
-        <tr>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 1</td>
-        </tr>
-        <tr>
-            <td>Row 1 : Cell 0</td>
-            <td>Row 1 : Cell 1</td>
-            <td>Row 1 : Cell 2</td>
-            <td>Row 0 : Cell 1</td>
-        </tr>
-    </tbody>
-</table>
-```
-
-Which looks like this:
-
-<table>
-    <tbody>
-        <tr>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 0</td>
-            <td>Row 0 : Cell 1</td>
-        </tr>
-        <tr>
-            <td>Row 1 : Cell 0</td>
-            <td>Row 1 : Cell 1</td>
-            <td>Row 1 : Cell 2</td>
-            <td>Row 0 : Cell 1</td>
-        </tr>
-    </tbody>
-</table>
 
 ### JsonToList
 
