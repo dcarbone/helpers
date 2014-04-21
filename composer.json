@@ -27,8 +27,8 @@
         "lib-libxml" : "*"
     },
     "autoload" : {
-        "psr-0" : {
-            "DCarbone\\Helpers\\" : "lib/"
+        "psr-4" : {
+            "DCarbone\\Helpers\\" : ""
         }
     }
 }
