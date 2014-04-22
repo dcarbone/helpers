@@ -252,20 +252,23 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
     }
 
     /**
-     * Filter internal dataset using closure
+     * Applies array_filter to internal dataset, returns new instance with resulting values.
+     *
+     * @link http://www.php.net/manual/en/function.array-filter.php
+     *
+     * Inspired by:
+     *
+     * @link http://www.doctrine-project.org/api/common/2.3/source-class-Doctrine.Common.Collections.ArrayCollection.html#377-387
      *
      * @param callable $func
      * @return bool
      */
-    public function filter(\Closure $func)
+    public function filter(\Closure $func = null)
     {
-        foreach($this->_dataSet as $key=>$element)
-        {
-            if (!$func($key, $element))
-                return false;
-        }
+        if ($func === null)
+            return new static(array_filter($this->_dataSet));
 
-        return true;
+        return new static(array_filter($this->_dataSet, $func));
     }
 
     /**
