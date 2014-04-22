@@ -261,7 +261,7 @@ abstract class AbstractTraversableClass implements \Countable, \RecursiveIterato
      * @link http://www.doctrine-project.org/api/common/2.3/source-class-Doctrine.Common.Collections.ArrayCollection.html#377-387
      *
      * @param callable $func
-     * @return bool
+     * @return static
      */
     public function filter(\Closure $func = null)
     {
