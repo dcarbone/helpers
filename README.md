@@ -149,8 +149,8 @@ public getIterator ()
 // Return new instance of extended class after applying array_map to internal contents
 public map (\Closure $func)
 
-// Apply closure to internal data set.  Returns bool
-public filter (\Closure $func)
+// Return new instance of extended class after applying array_filter to internal contents 
+public filter (\Closure $func = null)
 
 // Is this collection empty?
 public isEmpty ()
