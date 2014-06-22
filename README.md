@@ -7,8 +7,6 @@ Included Helpers
 ----------------
 
 - JsonToList
-- JsonWriterPlus
-- XMLWriterPlus
 - AbstractTraversableClass
 - KeyValuePair
 - JsonSerializable
