@@ -8,11 +8,9 @@ Included Helpers
 
 - JsonToList
 - KeyValuePair
+- FileHelper
 
-Basic Usage
------------
-
-### JsonToList
+## JsonToList
 
 ```php
 $jsonString = <<<STRING
@@ -44,5 +42,17 @@ echo JsonToList::invoke($jsonString);
 
 // Alternatively you can have a \DOMDocument object returned to you
 $dom = JsonToList::invoke($jsonString, true);
+
+## FileHelper
+
+For now, this class is very simple.  The only method available at the moment is ``` getLineCount ```, which is used as such:
+
+```php
+$line_count = \DCarbone\Helpers\FileHelper::getLineCount("full_path_to_file");
+```
+
+You may optionally pass in the string "linux" or "windows" to explicitly define which command is used, however if 2nd
+parameter is passed, the method will attempt to determine what type of system it is on by looking at the value of
+``` DIRECTORY_SEPARATOR ```
 
 ```
