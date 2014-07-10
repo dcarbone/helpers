@@ -52,6 +52,4 @@ For now, this class is very simple.  The only method available at the moment is 
 $line_count = \DCarbone\Helpers\FileHelper::getLineCount("full_path_to_file");
 ```
 
-You may optionally pass in the string "linux" or "windows" to explicitly define which command is used, however if 2nd
-parameter is passed, the method will attempt to determine what type of system it is on by looking at the value of
-``` DIRECTORY_SEPARATOR ```
+You may optionally pass in the string "linux" or "windows" as the 2nd parameter to explicitly define which command is used. If no 2nd parameter is seen, the method will attempt to determine what type of system it is on by looking at the value of ``` DIRECTORY_SEPARATOR ```
