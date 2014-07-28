@@ -6,7 +6,12 @@
     "keywords": [
         "php",
         "helpers",
-        "helper"
+        "helper",
+        "file",
+        "line count",
+        "silent command",
+        "json to list",
+        "json to ul"
     ],
     "homepage": "https://github.com/dcarbone/helpers",
     "license": "MIT",
