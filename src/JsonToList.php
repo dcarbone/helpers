@@ -1,10 +1,10 @@
 <?php namespace DCarbone\Helpers;
 
 /**
- * Class JsonToUL
+ * Class JsonToList
  * @package DCarbone
  */
-class JsonToList
+abstract class JsonToList
 {
     /**
      * Invoke the helper
@@ -39,7 +39,7 @@ class JsonToList
     /**
      * @param \DOMDocument $dom
      * @param \DOMNode $node
-     * @return mixed|string
+     * @return string
      */
     protected static function saveHTMLExact(\DOMDocument $dom, \DOMNode $node)
     {

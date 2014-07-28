@@ -7,31 +7,56 @@
 abstract class FileHelper
 {
     /**
-     * @param string $file_path
+     * @var array
+     */
+    protected static $lineCountCommands = array(
+        'linux' => 'wc -l "{FILE_PATH}"',
+        'windows' => 'findstr /R /N "^" "{FILE_PATH}" | find /c ":"',
+    );
+
+    /**
+     * @param string $system
+     * @param string $commandString
+     * @throws \InvalidArgumentException
+     */
+    public static function addLineCountCommand($system, $commandString)
+    {
+        if (strpos($commandString, '{FILE_PATH}') === false)
+            throw new \InvalidArgumentException(
+                'FileHelper::addLineCountCommand - Command for "'.$system.'" ("'.$commandString.'") does not contain'.
+                ' required "{FILE_PATH}" string!');
+
+        static::$lineCountCommands[$system] = $commandString;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getLineCountCommands()
+    {
+        return static::$lineCountCommands;
+    }
+
+    /**
+     * @param string $filePath
      * @param null|string $system
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      * @return int|null
      */
-    public static function getLineCount($file_path, $system = null)
+    public static function getLineCount($filePath, $system = null)
     {
         if ($system === null)
             $system = (DIRECTORY_SEPARATOR === '/' ? 'linux' : 'windows');
 
-        if (!is_string($file_path))
-            throw new \InvalidArgumentException('FileHelper::getLineCount - "$file_path" expected to be string, saw "'.gettype($file_path).'"');
+        if (!is_string($filePath))
+            throw new \InvalidArgumentException('FileHelper::getLineCount - "$filePath" expected to be string, saw "'.gettype($filePath).'"');
 
-        if (!file_exists($file_path))
-            throw new \InvalidArgumentException('FileHelper::getLineCount - "$file_path" specified non-existent file "'.$file_path.'"');
+        if (!file_exists($filePath))
+            throw new \InvalidArgumentException('FileHelper::getLineCount - "$filePath" specified non-existent file "'.$filePath.'"');
 
-        switch($system)
-        {
-            case 'linux' :
-                return (int)exec('wc -l '.$file_path);
-
-            case 'windows' :
-                return (int)exec('findstr /R /N "^" '.$file_path.' | find /c ":"');
-        }
+        if (isset(static::$lineCountCommands[$system]))
+            return (int)exec(str_replace('{FILE_PATH}', $filePath, static::$lineCountCommands[$system]));
 
         throw new \RuntimeException('FileHelper::getLineCount - Could not determine file system type');
     }
