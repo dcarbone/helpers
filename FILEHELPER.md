@@ -7,8 +7,8 @@ through the file line by line and iterating some integer yourself or scooping th
 
 Neither of these are particularly fast or elegant solutions.
 
-To help rectify this, this helper executes a ```[exec()](http://php.net/manual/en/function.exec.php)``` command as to
-allow the OS itself to provide the line count.  This is a MUCH faster, much more memory-sensitive solution to this problem.
+To that end, this helper executes a [exec()](http://php.net/manual/en/function.exec.php) command that
+allows the OS itself to provide the line count.  This is a MUCH faster and memory-sensitive solution to this problem.
 
 **Usage**
 
