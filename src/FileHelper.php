@@ -60,4 +60,18 @@ abstract class FileHelper
 
         throw new \RuntimeException('FileHelper::getLineCount - Could not determine file system type');
     }
+
+    /**
+     * Because Windows................. :(
+     *
+     * @param string $file
+     * @return bool
+     */
+    public static function superUnlink($file)
+    {
+        if (DIRECTORY_SEPARATOR === '/' || strpos(php_uname(), 'Windows') === false)
+            return (bool)unlink($file);
+
+        return shell_exec('DEL /F/Q "'.$file.'"');
+    }
 }
