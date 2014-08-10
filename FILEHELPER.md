@@ -49,12 +49,6 @@ var_dump($bytes);
 
 The important piece is the ``` "{FILE_PATH}" ``` bit of the command, it is required.
 
-### Super Unlink
-
-Because Windows, offers alternative to the standard http://php.net/manual/en/function.unlink.php implementation.
-
-If not Windows, defers to default ``` unlink() ```.
-
 ### Other Methods!
 
 Right now there aren't any!  But, as need arises (or as suggestions come in) I will be expanding
