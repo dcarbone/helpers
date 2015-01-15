@@ -42,7 +42,7 @@ something other than lines, you could do something like this:
 ```php
 \DCarbone\Helpers\FileHelper::addLineCountCommand('linux-bytes', 'wc -c "{FILE_PATH}"');
 
-$bytes = \DCarbone\Helpers\FileHelper::getLineCount(realpath(__DIR__).'/../FILEHELPER.md', 'linux-bytes');
+$bytes = \DCarbone\Helpers\FileHelper::getLineCount(__DIR__.'/../FILEHELPER.md', 'linux-bytes');
 
 var_dump($bytes);
 ```
