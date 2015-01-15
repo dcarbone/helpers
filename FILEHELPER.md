@@ -13,7 +13,7 @@ allows the OS itself to provide the line count.  This is a MUCH faster and memor
 **Usage**
 
 ```php
-$length = \DCarbone\Helpers\FileHelper::getLineCount(realpath(__DIR__).'/../FILEHELPER.md');
+$length = \DCarbone\Helpers\FileHelper::getLineCount(__DIR__.'/../FILEHELPER.md');
 
 var_dump($length);
 ```
