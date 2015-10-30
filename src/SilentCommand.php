@@ -33,27 +33,27 @@ abstract class SilentCommand
     public static function executeWindows($commands, $cdToScriptRoot = false)
     {
         $bat_filename = static::$tmpDir.DIRECTORY_SEPARATOR.uniqid().'-silent_command.bat';
-        $bat_file = fopen($bat_filename, "w");
+        $bat_file = fopen($bat_filename, 'w');
         if($bat_file)
         {
-            fwrite($bat_file, "@echo off \n");
+            fwrite($bat_file, "@echo off \r\n");
 
             if ($cdToScriptRoot)
-                fwrite($bat_file, 'cd '.static::$scriptRootDir."\n");
+                fwrite($bat_file, 'cd '.static::$scriptRootDir."\r\n");
 
             if (is_string($commands))
             {
-                fwrite($bat_file, $commands."\n");
+                fwrite($bat_file, $commands."\r\n");
             }
             else if (is_array($commands))
             {
                 foreach($commands as $c)
                 {
-                    fwrite($bat_file, $c."\n");
+                    fwrite($bat_file, $c."\r\n");
                 }
             }
 
-            fwrite($bat_file, 'DEL "'.$bat_filename.'"'."\n");
+            fwrite($bat_file, 'DEL "'.$bat_filename.'"'."\r\n");
             fclose($bat_file);
 
             $exe = 'start /b '.$bat_filename;

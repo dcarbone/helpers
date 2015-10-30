@@ -4,8 +4,18 @@
  * Class JsonToList
  * @package DCarbone
  */
-abstract class JsonToList
+class JsonToList
 {
+    /**
+     * @param string $jsonString
+     * @param bool $returnNode
+     * @return \DOMNode|string
+     */
+    public function __invoke($jsonString, $returnNode = false)
+    {
+        return static::invoke($jsonString, $returnNode);
+    }
+
     /**
      * Invoke the helper
      *
@@ -20,20 +30,29 @@ abstract class JsonToList
         $jsonString = mb_convert_encoding($jsonString, 'UTF-8', mb_detect_encoding($jsonString));
 
         $jsonDecode = json_decode($jsonString, false);
+        $lastError = json_last_error();
 
-        $ul = $dom->createElement('ul');
-        $ul->setAttribute('class', 'json-list');
-        $dom->appendChild($ul);
+        if (JSON_ERROR_NONE === $lastError)
+        {
+            $ul = $dom->createElement('ul');
+            $ul->setAttribute('class', 'json-list');
+            $dom->appendChild($ul);
 
-        if ($jsonDecode instanceof \stdClass)
-            self::objectOutput($jsonDecode, $dom, $ul);
-        else if (is_array($jsonDecode))
-            self::arrayOutput($jsonDecode, $dom, $ul);
+            if ($jsonDecode instanceof \stdClass)
+                self::objectOutput($jsonDecode, $dom, $ul);
+            else if (is_array($jsonDecode))
+                self::arrayOutput($jsonDecode, $dom, $ul);
 
-        if ($returnNode === false)
+            if ($returnNode)
+                return $dom;
+
             return static::saveHTMLExact($dom, $ul);
+        }
 
-        return $dom;
+        throw new \DomainException(sprintf(
+            'Could not convert input to HTML: "%s"',
+            JsonErrorHelper::invoke(true, $lastError)
+        ));
     }
 
     /**
@@ -77,21 +96,19 @@ abstract class JsonToList
                 $li->appendChild($ul);
                 self::arrayOutput($v, $dom, $ul);
             }
-            else if (is_scalar($v) && !is_bool($v))
+            else if (is_bool($v))
+            {
+                switch($v)
+                {
+                    case true: $li->appendChild($dom->createTextNode(' TRUE')); break;
+                    case false: $li->appendChild($dom->createTextNode(' FALSE')); break;
+                }
+            }
+            else if (is_scalar($v))
             {
                 $span = $dom->createElement('span');
                 $span->appendChild($dom->createTextNode(' '.strval($v)));
                 $li->appendChild($span);
-            }
-            else if (is_bool($v))
-            {
-                $text = null;
-                switch($v)
-                {
-                    case true : $text = $dom->createTextNode(' TRUE'); break;
-                    case false : $text = $dom->createTextNode(' FALSE'); break;
-                }
-                $li->appendChild($text);
             }
         }
         return $dom;
@@ -107,36 +124,35 @@ abstract class JsonToList
      */
     protected static function arrayOutput(array $array, \DOMDocument $dom, \DOMElement $parentUL)
     {
-        foreach($array as $value)
+        foreach($array as $v)
         {
             $li = $dom->createElement('li');
             $parentUL->appendChild($li);
-            if ($value instanceof \stdClass)
+            if ($v instanceof \stdClass)
             {
                 $ul = $dom->createElement('ul');
                 $li->appendChild($ul);
-                self::objectOutput($value, $dom, $ul);
+                self::objectOutput($v, $dom, $ul);
             }
-            else if (is_array($value))
+            else if (is_array($v))
             {
                 $ul = $dom->createElement('ul');
                 $li->appendChild($ul);
-                self::arrayOutput($value, $dom, $ul);
+                self::arrayOutput($v, $dom, $ul);
             }
-            else if (is_scalar($value) && !is_bool($value))
+            else if (is_bool($v))
             {
-                $li->appendChild($dom->createTextNode(strval($value)));
-            }
-            else if (is_bool($value))
-            {
-                $text = null;
-                switch($value)
+                switch($v)
                 {
-                    case true : $text = $dom->createTextNode(' TRUE'); break;
-                    case false : $text = $dom->createTextNode(' FALSE'); break;
+                    case true: $li->appendChild($dom->createTextNode(' TRUE')); break;
+                    case false: $li->appendChild($dom->createTextNode(' FALSE')); break;
                 }
-                $li->appendChild($text);
             }
+            else if (is_scalar($v))
+            {
+                $li->appendChild($dom->createTextNode(strval($v)));
+            }
+
         }
         return $dom;
     }

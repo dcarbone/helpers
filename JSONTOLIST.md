@@ -1,5 +1,7 @@
 ## JsonToList
 
+This is a simple class that produces a series of HTML list elements that attempt to represent
+the structure of a decoded JSON object.
 
 ### Usage
 

@@ -7,5 +7,6 @@ Included Helpers
 ----------------
 
 - [JsonToList](JSONTOLIST.md)
-- [FileHelper](FILEHELPER.md)
+- [JsonErrorHelper](JSONERRORHELPER.md)
+- [FileShellHelper](FILESHELLHELPER.md)
 - [SilentCommand](SILENTCOMMAND.md)
