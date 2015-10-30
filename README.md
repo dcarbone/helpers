@@ -6,7 +6,8 @@ A series of little PHP helper classes
 Included Helpers
 ----------------
 
-- [JsonToList](JSONTOLIST.md)
-- [JsonErrorHelper](JSONERRORHELPER.md)
-- [FileShellHelper](FILESHELLHELPER.md)
-- [SilentCommand](SILENTCOMMAND.md)
+- [JsonToList](docs/JSONTOLIST.md)
+- [JsonErrorHelper](docs/JSONERRORHELPER.md)
+- [FileShellHelper](docs/FILESHELLHELPER.md)
+- [SilentCommand](docs/SILENTCOMMAND.md)
+- [SystemOSTypeHelper](docs/SYSTEMOSTYPEHELPER.md)
