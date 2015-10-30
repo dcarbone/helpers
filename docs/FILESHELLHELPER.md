@@ -52,5 +52,5 @@ is useful, please create a pull request with the updated command array.
 
 #### Current List of Predefined Commands
 
-- [linux-line-count](src/FileShellHelper.php#L13)
-- [windows-line-count](src/FileShellHelper.php#L14)
+- [linux-line-count](../src/FileShellHelper.php#L13)
+- [windows-line-count](../src/FileShellHelper.php#L14)
