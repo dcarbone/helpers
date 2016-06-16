@@ -3,6 +3,15 @@ Helpers
 
 A series of little PHP helper classes
 
+Composer Installation
+---------------------
+
+```json
+{
+  "dcarbone/helpers": "7.0.*"
+}
+```
+
 Included Helpers
 ----------------
 
